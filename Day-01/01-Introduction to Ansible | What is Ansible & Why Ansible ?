@@ -1,0 +1,123 @@
+
+
+Day 1 - Introduction to Ansible | What is Ansible and Why Ansible ?
+=====================================================================
+
+
+# Before DevOps Sys-Admins were Doing Configuration Management Manually Below are the Examples of Some Day to Day Activities of Sys-Admins
+
+1) Update the OS of the VM
+
+2) Make sure the Packages used by the OS are Up to Date
+
+3) Make Sure the Dependencies used by the Applications are Up to Date
+
+4) Maintenance of the Systems
+
+
+
+# The Machine in Which we Install Ansible is called as Control Node
+
+# All the Machine which a Control Node is Managing is called as Manage Nodes
+
+
+
+# Ansible in Brief
+======================
+Ansible started as a Configuration Management tool but now it's a powerful automation platform where configuration management is one of its tasks apart from that Ansible can also do provisioning what exactly provisioning means just like how terraform can create resources on your Cloud platforms similarly using ansible also you can provision resources for example an E2 instance creation or a S3 bucket or if you're using Azure you can create a virtual machine so Ansible can also work for provisioning it's core skill where Ansible can work for configuration management Ansible is also widely used for deployment in CICD there are a lot of people who use Ansible for deploying the artifact onto the target servers why because if you understood the concept of Ansible what Ansible can do using one control node it can deploy any things onto multiple manage nodes right so people have figured this this out that it can also help with their deployment if they want to deploy an application to multiple Kubernetes clusters or to multiple virtual machines they can also use Ansible for that so that's why lot of people also use Ansible in their CICD for the deployment phase and another important thing which is quite popular these days where Ansible can also be used for Network automation so although it started its Journey as a configuration management tool but now it is spread across.
+
+
+
+
+
+
+
+# Ansible in Simple Words
+===========================
+Ansible is an automation platform where Ansible can help you with Provisioning, Configuration Management, Deployment and Network Automation in terms of provisioning it can be used for creating infrastructure creating platforms for example creating EC2 instances S3 buckets virtual machines in terms of configuration management it can help life of DevOps Engineers or system administrators by managing configuration of hundreds of virtual machines it can be used for deployment in the CICD phase and it can be also used for Network automation.
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+GitHub Notes - 
+==============
+
+
+
+# Introduction to Ansible
+
+## What is Ansible ?
+
+Ansible is an open source IT automation engine that automates 
+- provisioning 
+- configuration management
+- application deployment
+- orchestration
+
+and many other IT processes. It is free to use, and the project benefits from the experience and intelligence of its thousands of contributors.
+
+## How Ansible works ?
+
+Ansible is agentless in nature, which means you don't need install any software on the manage nodes.
+
+For automating Linux and Windows, Ansible connects to managed nodes and pushes out small programs—called Ansible modules—to them. These programs are written to be resource models of the desired state of the system. Ansible then executes these modules (over SSH by default), and removes them when finished. These modules are designed to be idempotent when possible, so that they only make changes to a system when necessary.
+
+For automating network devices and other IT appliances where modules cannot be executed, Ansible runs on the control node. Since Ansible is agentless, it can still communicate with devices without requiring an application or service to be installed on the managed node.
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+# Comparison with Shell Scripting
+==================================
+
+- Shell Scripting works only for Linux.
+
+- Becomes complex and less readable(for non-experts) as the script size goes high.
+
+- Idempotence and predictability
+
+When the system is in the state your playbook describes Ansible does not change anything, even if the playbook runs multiple times.
+
+for example, run the below shell script twice and you will notice the script will fail. Which means shell scripting is not idempotent in nature.
+
+
+#/bin/bash
+
+set -e 
+
+mkdir test-demo
+echo "hi"
+
+
+- Scalability and flexibility
+
+Easily and quickly scale the systems you automate through a modular design that supports a large range of operating systems, cloud platforms, and network devices.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
