@@ -1,0 +1,61 @@
+
+
+
+Day-8 | Error Handling in Ansible Playbooks | Demo included
+=============================================================
+
+
+vim error-handling.yaml 
+
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Install security updates
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: latest
+      loop:
+      - openssl
+      - openssh
+      ignore_errors: yes
+
+    - name: Check if Docker is Installed
+      ansible.builtin.command: docker --version
+      register: output
+      ignore_errors: yes
+    - ansible.builtin.debug:
+        var: output
+
+    - name: Install docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+      when: output.failed
+
+    - name: Check if a file exists in temp and fail task if it does
+      ansible.builtin.command: ls /tmp/this_should_not_be_here
+      register: result
+      failed_when:
+          - result.rc == 0
+          - '"No such" not in result.stdout'
+
+        
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
