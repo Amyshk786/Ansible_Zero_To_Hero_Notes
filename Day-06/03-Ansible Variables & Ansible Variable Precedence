@@ -1,0 +1,170 @@
+
+
+
+Ansible Variables -
+=====================
+
+
+Variables are Used in Any Programming languages so that the values are not Hard Coded and it is Easy for the Author to Share the Code with Anybody so they can Enter the Values of they require.
+
+
+
+
+You Can Use the Below Link For Ansible Variables Documentation
+Link - https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html
+
+
+There are 22 Places Where you can Use Variables in Ansible
+
+
+cd ec2/  -> cd ec2/  -> cd defaults/  -> vim main.yml
+
+
+type: t2.micro
+
+
+Go to the tasks/ -> vim main.yml  -> instance_type me t2.micro hata k "{{ type }}"  dalna h 
+
+
+
+Note - vars main.yml ka Precedence defaults main.yml se h 
+
+[As a DevOps Engineers we Must use the defaults main.yml to Update the Variables so that if others wants to make the Changes they can do that]
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+
+
+Ansible Variable Precedence - 
+=============================
+
+
+
+Ansible variable precedence determines how Ansible resolves conflicts when the same variable is defined in multiple places. The highest precedence overrides variables defined at lower precedence levels. The order of precedence (from lowest to highest) is as follows:
+
+1. Default variables:
+These are defined in roles and playbooks using defaults/main.yml. These have the lowest precedence.
+
+
+2. Inventory variables:
+
+Group_vars/all: Variables that apply to all hosts.
+
+Group_vars/group_name: Variables specific to a group of hosts.
+
+Host_vars/host_name: Variables specific to a particular host.
+
+
+
+3. Playbook variables:
+
+Variables defined within a playbook under the vars section.
+
+
+
+4. Command-line variables:
+Variables passed via the --extra-vars (-e) option when running the playbook have the highest precedence. This is useful for overriding variables temporarily.
+
+
+5. Include vars (or imported vars):
+Variables loaded from a file using the include_vars or import_vars module.
+
+
+6. Set_facts:
+Variables defined with the set_fact module. These are set during a playbook run.
+
+
+7. Registered variables:
+These are created by registering the output of a task.
+
+
+8. Role variables:
+
+Variables defined inside a role via vars/main.yml or defaults/main.yml.
+
+Role defaults are overridden by other role variables, but role vars (from vars/main.yml) have a higher precedence than inventory variables.
+
+
+
+9. Block variables:
+Variables defined inside a block using the vars section of the block.
+
+
+10. Task variables:
+Variables defined within a specific task.
+
+
+11. Extra vars (-e):
+Command-line extra variables passed with ansible-playbook -e override all other variables.
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+
+
+# Summary of Precedence (Highest to Lowest):
+===============================================
+
+1. Extra vars (-e)
+
+
+2. Task variables
+
+
+3. Block variables
+
+
+4. Role variables (vars)
+
+
+5. Registered variables
+
+
+6. Set_facts
+
+
+7. Include vars (imported vars)
+
+
+8. Playbook variables
+
+
+9. Inventory variables
+
+
+10. Role defaults
+
+
+11. Default variables (from defaults/main.yml in roles)
+
+
+
+Understanding this hierarchy helps ensure the desired behavior in playbooks when multiple variables are defined at different levels.
+
+
+
+
+
+# Interview Answer on Variable Precedence - I'll go to the official documentation and I'll see but the most common places that I use is defaults, vars,  inside the Playbook, extra vars and the group vars
+
+
+
+
+
+
+
+
+
+
+
+
