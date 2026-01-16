@@ -1,0 +1,186 @@
+
+
+
+
+Day-05 - Ansible Galaxy Tutorial | Write less code, Use existing roles from galaxy
+====================================================================================
+
+
+
+We can Use this Ansible Roles Documentation For Reference as It is Very Important
+Link - https://galaxy.ansible.com/ui/standalone/roles/
+
+
+
+# Problem Statement -  Let's say that I'm given a task to Write an Ansible Playbook for Installation and Configuration of Docker at the first site this might look very simple to you Installing and Configuring Docker.  It's very easy but what if your Ansible Control Node Talks to Different Manage Nodes and you have to Install Docker on all of these Manage Nodes where one of the Manage Node is using Red Hat Linux one of the manage node is maybe using Debian one of the manage node is using Ubuntu of the manage node is using Alpine.
+
+
+Similarly one might be using Windows so in Each of these Virtual Machines the Command that you use to Install Docker Changes the Command that you use to Create a Docker User Changes the Command that you use to Restart your Docker Service might change. So the Complexity of the Ansible Playbook will go High when you have Different kinds of Configuration that's the whole purpose of Ansible right the Configuration Management where you you have Different Kinds of Virtual Machines Even the Simple things such as Installation of Docker the Complexity can be High because you have to Handle Different Conditions in your Ansible Playbook. 
+
+
+If the virtual machine is Red Hat then perform 1 2 3 four five tasks you know, if the virtual machine is Debian then perform different kind of tasks if the virtual machine is Ubuntu to you need to change the task so the number of tasks in your playbooks go High and the conditionals that you use also goes high. So this is where instead of writing Ansible Playbook or Ansible Role what you can do because Docker is a pretty common task first thing that you have to do is go to anible Galaxy and search and see if there is some role that suits your requirement.
+
+
+
+
+# Ansible Roles will Bring Modularity, Readability and You can Also Share the Ansible Roles Within Your Organisation and Outside your Organisation Using Ansible Galaxy.
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+
+When we Fire This Command it will Tell us that the Ansible Galaxy Can be Used for 2 Major Activities "Collections"  &  "Roles"
+
+ansible-galaxy -h 
+
+
+Output =  
+Collection   Manage an Ansible Galaxy collection.
+Role         Manage an Ansible Galaxy role.
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+When we Fire This Command it will Tell us that the Ansible Role Can be Used for "init", "remove" etc..
+
+ansible-galaxy role -h 
+
+
+Output = positional arguments:
+
+  ROLE_ACTION
+ 
+    init       Initialize new role with the base structure of a role.
+	
+    remove     Delete roles from roles_path.
+	
+    delete     Removes the role from Galaxy. It does not remove or alter the actual GitHub repository.
+	
+    list       Show the name and version of each role installed in the roles_path.
+	
+    search     Search the Galaxy database by tags, platforms, author and multiple keywords.
+	
+    import     Import a role into a galaxy server
+	
+    setup      Manage the integration between Galaxy and the given source.
+	
+    info       View more details about a specific role.
+	
+    install    Install role(s) from file(s), URL(s) or Ansible Galaxy
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+
+How to Install Any Role From Ansible Galaxy
+
+
+When we go to the Roles Section there is a Option for Install and there is a Link by Clicking on which we Can Copy the Command and Import the Role.
+
+
+# Command 
+
+ansible-galaxy role install bsmeding.docker     [bsmeding.docker is the name of the Role which we are Importing]
+
+
+Output = 
+
+- downloading role 'docker', owned by bsmeding
+- downloading role from https://github.com/bsmeding/ansible_role_docker/archive/1.0.11.tar.gz
+- extracting bsmeding.docker to /home/ubuntu/.ansible/roles/bsmeding.docker
+- bsmeding.docker (1.0.11) was installed successfully
+
+
+
+
+# We have to go to this Folder to Check the Role Which we Have Installed
+
+ls ~/.ansible/roles
+
+bsmeding.docker
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+# How to Set Password Less Authentication 
+===========================================
+
+
+Control Node :
+
+ssh-keygen  ->  Copy the id_rsa.pub   
+
+
+Go to the inventory.ini file and Add the Public IP Address of Both the Manage Nodes.
+
+
+
+
+Manage Nodes : 
+
+ssh-keygen  ->  vim known_hosts   -> Paste the id_rsa.pub Which we Have Copied From Control Node in the known_hosts File of Both the Manage Nodes.
+
+
+
+
+-----------------------------------------
+
+How to Use the Roles Which we have Installed From Ansible Galaxy
+
+
+We will create a New file with the Name "docker-playbook.yaml" 
+
+vim docker-playbook.yaml
+
+---
+
+- hosts: all
+  become: true
+  roles:
+    - bsmeding.docker
+
+
+
+
+-----------------------------------------
+
+
+To Run the Playbook Use below Command 
+
+ansible-playbook -i inventory.ini  docker-playbook.yaml
+
+
+
+Output = 
+
+ubuntu@ip-172-31-45-132:~$ docker --version
+Docker version 27.3.1, build ce12230
+
+
+ubuntu@ip-172-31-47-26:~$ docker --version
+Docker version 27.3.1, build ce12230
+
+
+
+Note - In the Output We can See that the Docker Has been Installed on Both the Manage Nodes Using the Role Which we have Imported from Ansible Galaxy.
+
+
+
