@@ -1,0 +1,81 @@
+
+
+
+
+# To Enable Bucket Versioning 
+==============================
+
+vim s3_versioning.yaml
+
+
+---
+- name: List s3 Buckets
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: list s3 buckets in AWS account
+      amazon.aws.s3_bucket_info:
+      register: s3_bucket
+
+    - debug:
+        var: s3_bucket
+
+    - name: Enable versioning on s3 buckets
+      amazon.aws.s3_bucket:
+        name: "{{ item.name}}"
+        versioning: yes
+      loop: "{{ s3_bucket.buckets }}"
+
+
+
+Command = ansible-playbook -i inventory.ini s3_versioning.yaml --vault-password-file vault.pass
+
+
+
+
+
+
+
+
+------------------------------------------------------------
+
+
+
+# To Disable Bucket Versioning 
+==============================
+
+
+vim s3_versioning_disable.yaml
+
+
+---
+- name: List s3 Buckets
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: list s3 buckets in AWS account
+      amazon.aws.s3_bucket_info:
+      register: s3_bucket
+
+    - debug:
+        var: s3_bucket
+
+    - name: Disable versioning on s3 buckets
+      amazon.aws.s3_bucket:
+        name: "{{ item.name}}"
+        versioning: no
+      loop: "{{ s3_bucket.buckets }}"
+
+
+
+Command = ansible-playbook -i inventory.ini s3_versioning.yaml --vault-password-file vault.pass
+
+
+
+
+
+
+
+
