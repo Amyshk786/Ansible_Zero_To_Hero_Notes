@@ -1,0 +1,138 @@
+
+
+
+Day 9 | Secure Ansible Playbooks using Vault | Beginner Level Guide | Theory + Practical
+=========================================================================================
+
+
+
+Best Practices While Using Ansible Vault
+=========================================
+
+
+1) Always Use a Strong Password
+
+
+
+2) Store the Vault.pass File Or the File Which Have All Your Passwords in  "AWS Secrets Manager", "AWS Systems Parameter Store", "AZURE Vault Service" [So we don't Compromise with our Password]
+
+
+
+3) We Have Different Vault Passwords for UT, Staging and Production Environment as this is a Best Practice.
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+What is Ansible Vault ? - As the Name suggests anible vault is used to secure any kind of sensitive information within your anible playbooks or roles it can be the passwords that you have or it can be some API tokens that you have within your anable playbook or some files or templates that you want to encrypt.
+
+
+
+It uses the ame logic just like like a regular bank vault for example you have some physical assets like documents or you have let's say money that you want to save so you go to a bank and you use the Vault service in the bank or a locker service in the bank you provide the initial password because to use the Vault first
+you need to set a password so you provide an initial password then the Vault opens for you you put all that sensitive information in it like the documents files money whatever it is and then again you lock the Vault using the Same Password only if you provide the right password you will be able to access it that's how Vault secures the assets for you.
+
+
+
+Now anible also use the same logic where if you want to secure a file now what do I mean by secure a file basically let's say if you want to encrypt a file or you want to encrypt a variable let's take file which has all your passwords for example so if you want to secure encrypt this file you go to the Vault service in anible the anible Vault command and you provide a initial password for it only if you provide the password anible Vault will be able to encrypt the files for you of course the password can be of your choice it can be a simple one it can be a strong password and now Vault returns you an encrypted file.
+
+
+
+Again the logic is same if you want to add contents to this file let's say you want to add a new password or let's say you want to remove one of the password or you want to update an existing password so you need to provide the Vault password to perform any action such as encrypt decrypt edit delete anything that you want to do so the same logic right just like your bank vault Ansible vault also works the same way. 
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+# These are the Options Which Are Available with Ansible Vault
+===============================================================
+
+
+Positional Arguments: {create, decrypt, edit, view, encrypt, encrypt_string, rekey}
+
+  
+create              Create new vault encrypted file
+	
+decrypt             Decrypt vault encrypted file
+	
+edit                Edit vault encrypted file
+	
+view                View vault encrypted file
+	
+encrypt             Encrypt YAML file
+	
+encrypt_string      Encrypt a string
+	
+rekey               Re-key a vault encrypted file
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+# How to Encrypt a File in Ansible
+==================================
+
+
+1) ansible-vault create aws_credentials.yaml   [Using this we will have to Provide the Password in CLI]
+
+
+
+2) ansible-vault create aws_credentials.yaml --vault-password-file vault.pass [This will take the password from the vault.pass file]
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+# How to Decrypt a File in Ansible
+===================================
+
+
+1) ansible-vault decrypt aws_credentials.yaml
+
+
+
+2) ansible-vault decrypt aws_credentials.yaml --vault-password-file vault.pass
+
+
+
+
+
+
+Note - View and Edit Can be used to see the Credentials which are in the Vault.
+
+
+
+
+
+
+
+
+
+
+
