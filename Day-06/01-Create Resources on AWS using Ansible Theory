@@ -1,0 +1,37 @@
+
+
+
+Day 6 - Create Resources on AWS using Ansible | Ansible Variables Demo | Ansible Vault Demo
+===============================================================================================
+
+
+
+So till now what we have done is we have used Ansible, So on the Control Node which is our laptop till now what we have done is we have installed Ansible and we were using the manage Nodes, So the Manage Nodes were on AWS so we were using ec2 instances so we connected to these ec2 instances using the passwordless authentication and we were creating uh the httpd packages or we were installing uh Docker something like that.
+
+
+
+So what were we doing till now we were using Ansible to connect to this ec2 instances through SSH protocol or passwordless Authentication Protocol and The Playbook or the roles that you were writing they were installing a module on the ec2 instance right whatever the code that you are writing whatever the yaml files that you are writing let's say you are writing a yaml file which will do something like apt install Docker anything so after connecting to this e to instances through the passwordless way anible installs a module on this E2 instances and the module is executed because there is python that is already installed on this manage nodes so this is what we were doing.
+
+
+
+But now let's say there is a use case where using Ansible so on the control node we have anible and what you want to do is instead of talking to your virtual machines you actually want to talk to the apis so now my use case is to the talk to the API of AWS and create some resources on AWS it can be ec2 it can be S3 bucket and not just AWS it can be Azure it can be gcp or it can be any network appliances like Cisco.
+
+
+
+How will you tackle this situation because in the scenario number one you have a virtual machine you can connect with Passwordless Authentication Install a Module and module gets executed and create resources here but now we want to talk through the API so for this purpose what you can do in Ansible is I mean you don't have to do anything but when you use the Ansible AWS modules or when you use Ansible  Cisco modules or when you use Ansible Azure modules so what Ansible does is Ansible installs the module on your control node or on your Local Host it doesn't connect to the appliances or AWS or anything through the passwordless authentication but instead it installs the module on the same machine on the control node and when this module is executed it will talk to the API because end of the day what is this module it is basically a python code which Ansible Executes so Ansible Runs the python code on your local machine and this python code talks to the APIs of AWS or talks to the APIs of Cisco or azure gcp whatever it is where we will come to know about these things what are the supported things in Ansible so there is a Concept in Ansible Called as Collections.
+
+
+
+
+If we go to the Ansible Documentation you have these Collections you have collection for Open Stack you have collection for Net App which is a storage related thing you have collection for Kubernetes you have collection for Info Blocks, Grafana, Google Namespace which is your GCP.
+
+
+
+
+You Can Use the Below Link For Ansible Collections Documentation
+Link - https://docs.ansible.com/ansible/latest/collections/index.html
+
+
+
+
+
