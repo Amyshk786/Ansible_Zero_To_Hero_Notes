@@ -1,0 +1,202 @@
+
+
+
+# Prerequisite
+================
+
+
+# Setup EC2 Collection and Authentication
+
+## Install pip
+
+sudo apt install python3-pip
+
+
+
+
+## Install boto3
+
+```
+pip install boto3
+
+```
+
+
+
+## Create a Folder and File 
+
+mkdir ec2
+
+cd ec2/
+
+touch ec2_create.yaml
+
+
+vim ec2_create.yaml
+
+--- 
+- hosts: localhost
+  connection: local
+  roles:
+	- ec2 
+
+
+cp inventory.ini ec2/
+
+
+
+
+
+## Install AWS Collection
+
+```
+ansible-galaxy collection install amazon.aws
+```
+
+
+
+
+## Create a Ansible Role
+
+ansible-galaxy role init ec2 
+
+
+
+cd ec2  -> ls  -> cd tasks/  ->  vim main.yml  [Paste this in the file]
+
+
+
+  - name: start an instance with a public IP address
+    amazon.aws.ec2_instance:
+      name: "ansible-instance"
+      # key_name: "nv.cer"
+      # vpc_subnet_id: subnet-0403630b1be87c2c7
+      instance_type: t2.micro
+      security_group: default
+      region: us-east-1
+      aws_access_key: "{{ec2_access_key}}"  # From vault as defined
+      aws_secret_key: "{{ec2_secret_key}}"  # From vault as defined
+      network:
+        assign_public_ip: true
+      image_id: ami-005fc0f236362e99f
+      tags:
+        Environment: Testing
+		
+		
+ 
+
+
+
+
+
+
+# We will Require the Access Key and Secret Access Key to Login to AWS and Talk to AWS API, So For this Ansible Has Built-In Vault Integration. [Where we Can Secure Our Variables, Passwords, API Tokens]
+
+
+
+
+## Setup Vault 
+
+1. Create a password for vault
+
+```
+openssl rand -base64 2048 > vault.pass
+```
+
+2. Add your AWS credentials using the below vault command
+
+```
+ansible-vault create group_vars/all/pass.yml --vault-password-file vault.pass
+
+
+
+After Runing the 2nd Command it will ask Do you want to write Something in the File, We Need to Paste the Access Key & Secret Access Key
+
+Example :
+
+ec2_access_key: AKIAR4UZEGUAJWR6RH61
+ec2_secret_key: HGN/gF/ziLnyppOQpSSNRkQTZUDni9OlkI0Oud5F
+
+
+
+
+
+
+
+
+# Now we will Run the Below Command and it will Create a EC2 Instance with the name "ansible-instance"
+
+ansible-playbook -i inventory.ini ec2_create.yaml --vault-password-file vault.pass
+ 
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+
+What we Learned till now - 
+
+
+Importance of Collections In Ansible - When you want to use Ansible for infrastructure provisioning like creating resources on AWS or when you want to use anible for Network Automation, For provisioning of Infrastructure or network automation you need the concept like collections because either the network appliances or the PAAS Platforms, SAAS Platforms, IAAS Platforms like AWS they need to be interacted through the APIs  and to talk to the apis of them so anible provides Collections and this collections will have roles modules and other things where they get executed on your control node the buil-in modules they get executed they get installed on the manage nodes as modules and on your manage node you will have Python and they get executed it can be the copy module or it can be the shell module or it can be the APT module they are running directly on your manage node.
+
+
+
+But the infrastructure provisioning or network automation they run on your control node and they talk to the apis of AWS or uh Cisco or F5 any of these things because you cannot directly talk to them through the SSH they will not have the protocols like SSH you cannot connect to the AWS console through the SSH prot protocol you cannot connect to F5 through the SSH protocol that's why the only medium is to talk through the apis. 
+
+
+
+Each Collections May have Some Prerequisites, In Case of AWS we saw the Prerequisites were to Install Boto3 and we saw we need to Install the AWS Collection. Ofcourse you need to use the Vault for securing your AWS access key and Secret Access Key
+ 
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------
+
+
+
+# Setup EC2 Collection and Authentication
+=========================================
+
+## Install boto3
+
+```
+pip install boto3
+```
+
+
+## Install AWS Collection
+
+```
+ansible-galaxy collection install amazon.aws
+```
+
+
+
+## Setup Vault 
+
+1. Create a password for vault
+
+```
+openssl rand -base64 2048 > vault.pass
+```
+
+
+2. Add your AWS credentials using the below vault command
+
+```
+ansible-vault create group_vars/all/pass.yml --vault-password-file vault.pass
+```
+
+
+
+
+
