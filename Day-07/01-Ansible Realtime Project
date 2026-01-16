@@ -1,0 +1,213 @@
+
+
+
+Day-07 - Ansible Project for Beginners (Asked in Intrviews)| Provisioning + Configuration Management
+==========================================================================================================
+
+
+Ansible is a popular provisioning, configuration management and network automation platform. In this video, I will demonstrate a Ansible project using three tasks.
+
+ 
+1) Use Ansible to create Three EC2 instances, one of type Amazon Linux and 2 instances of types Ubuntu. Make sure to secure the AWS credentials in Ansible vault.
+
+
+2) Setup Passwordless Authentication with the Created EC2 Instances. 
+
+
+3) Shutdown only selected EC2 instances using Ansible conditionals (When condition).
+
+
+
+
+
+
+# Ansible Realtime project
+===========================
+
+
+
+## Task 1
+
+Create three(3) EC2 instances on AWS using Ansible loops
+- 2 Instances with Ubuntu Distribution
+- 1 Instance with Centos Distribution
+
+Hint: Use `connection: local` on Ansible Control node.
+
+
+
+
+## Task 2
+
+Set up passwordless authentication between Ansible control node and newly created 
+instances.
+
+
+
+
+## Task 3
+
+Automate the shutdown of Ubuntu Instances only using Ansible Conditionals
+
+Hint: Use `when` condition on ansible `gather_facts`
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------
+
+
+Practical Start 
+==================
+
+
+
+Task 1 - 
+=========
+
+
+
+sudo apt update
+
+sudo apt install software-properties-common
+
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+
+sudo apt install ansible
+
+sudo apt install python3-pip
+
+pip install boto3 
+
+
+ansible-galaxy collection install amazon.aws
+
+
+openssl rand -base64 2048 > vault.pass
+
+
+ansible-vault create group_vars/all/pass.yml --vault-password-file vault.pass
+
+
+Provide the Access Key and Secret Access Key 
+
+
+vim ec2_create.yaml
+
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+  - name: Create EC2 instances
+    amazon.aws.ec2_instance:
+      name: "{{item.name}}"
+      key_name: "nv"
+      instance_type: t2.micro
+      security_group: default
+      region: us-east-1
+      aws_access_key: "{{ec2_access_key}}"  # From vault as defined
+      aws_secret_key: "{{ec2_secret_key}}"  # From vault as defined
+      network:
+        assign_public_ip: true
+      image_id: "{{item.image}}"
+      tags:
+        environment: "{{item.name}}"
+
+    loop:
+      - { image: "ami-0fff1b9a61dec8a5f", name: "manage-node-1" } # Update AMI ID according
+      - { image: "ami-0866a3c8686eaeeba", name: "manage-node-2" } # to your account
+      - { image: "ami-0866a3c8686eaeeba", name: "manage-node-3" }
+
+
+
+
+Command = ansible-playbook ec2_create.yaml --vault-password-file vault.pass
+
+
+
+
+
+------------------------------------------------------------
+
+
+
+Task 2 - 
+
+
+How to Set Password Less Authentication 
+
+
+Control Node :
+
+ssh-keygen  ->  Copy the id_rsa.pub   
+
+
+Go to the inventory.ini file and Add the Public IP Address of Both the Manage Nodes.
+
+
+
+
+Manage Nodes : 
+
+ssh-keygen  ->  vim known_hosts   -> Paste the id_rsa.pub Which we Have Copied From Control Node in the known_hosts File of Both the Manage Nodes.
+
+
+
+
+
+
+
+------------------------------------------------------------
+
+
+
+Task 3 - 
+
+
+vim inventory.ini
+
+[all]
+ec2-user@IP_ADD
+ubuntu@IP_ADD
+ubuntu@IP_ADD
+
+
+vim ec2_shutdown.yaml
+
+
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Shutdown ubuntu instances only
+      ansible.builtin.command: /sbin/shutdown -t now
+      when:
+       ansible_facts['os_family'] == "Debian"
+
+
+
+
+
+Command = ansible-playbook -i inventory.ini ec2_shutdown.yaml --vault-password-file vault.pass
+
+
+
+
+
+
+
+
+
+
+
+
+
